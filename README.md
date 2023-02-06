@@ -81,16 +81,9 @@ Complete the following tasks:
 1. Update the `README.md` file so that the travis button points to your repo
 1. Implement the `word_ladder`, `verify_word_ladder`, and `_adjacent` functions so that all test cases in `tests/test_main.py` pass
 
-~~Your grade will be the percentage of test cases that successfully pass in travis.~~
-You will receive -1 point for each failing test case.
+If all test cases pass, you will get full credit.
+If not all test cases pass, you will lose -4 points for the first failing test case and -1 points for each additional failing test case.
 
 ## Submission
 
 Submit the link to your forked repository on sakai.
-
-## Collaboration Policy
-
-**You are not allowed to look at another student's github repo.**
-
-All other forms of collaboration with other students are encouraged.
-You may use any other online resources you like to complete this assignment.
