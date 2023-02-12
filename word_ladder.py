@@ -1,6 +1,7 @@
 #!/bin/python3
 
 
+
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
     Returns a list satisfying the following properties:
@@ -28,7 +29,28 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     Whenever it is impossible to generate a word ladder between the two words,
     the function returns `None`.
     '''
-
+    with open('words5.dict', 'r') as file:
+        words = file.readlines()
+    words_list = [word.strip() for word in words]
+    from collections import deque
+    stack = []
+    stack.append(start_word)
+    queue = deque([])
+    queue.append(stack[0])
+    i = 0
+    while queue:
+        word_awaiting = queue.pop()
+        while i < len(words_list):   
+            if _adjacent(word_awaiting, words_list[i]):
+                if words_list[i] not in stack:
+                    stack.append(words_list[i])
+                    queue.append(words_list[i])       
+                if words_list[i] == end_word:
+                    return stack
+            else:
+                i += 1
+        return None
+    return stack
 
 def verify_word_ladder(ladder):
     '''
@@ -40,8 +62,13 @@ def verify_word_ladder(ladder):
     >>> verify_word_ladder(['stone', 'shone', 'phony'])
     False
     '''
-
-
+    if len(ladder) == 0: 
+        return False
+    for i in range(len(ladder)-1):
+        if _adjacent(ladder[i], ladder[i+1]) == False:
+            return False 
+    return True
+            
 def _adjacent(word1, word2):
     '''
     Returns True if the input words differ by only a single character;
@@ -52,3 +79,8 @@ def _adjacent(word1, word2):
     >>> _adjacent('stone','money')
     False
     '''
+    counter = 0
+    for i in range(len(word1)):
+        if word1[i] != word2[i]:
+            counter += 1
+    return counter == 1
