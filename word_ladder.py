@@ -1,5 +1,5 @@
 #!/bin/python3
-
+from collections import deque
 
 
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
@@ -31,26 +31,25 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
     with open('words5.dict', 'r') as file:
         words = file.readlines()
-    words_list = [word.strip() for word in words]
-    from collections import deque
+    words_list = [word.strip() for word in words] 
     stack = []
     stack.append(start_word)
     queue = deque([])
-    queue.append(stack[0])
-    i = 0
+    queue.append(stack)
+    if start_word == end_word:
+        return stack
     while queue:
-        word_awaiting = queue.pop()
-        while i < len(words_list):   
-            if _adjacent(word_awaiting, words_list[i]):
-                if words_list[i] not in stack:
-                    stack.append(words_list[i])
-                    queue.append(words_list[i])       
-                if words_list[i] == end_word:
-                    return stack
-            else:
-                i += 1
-        return None
-    return stack
+        curr_stack = queue.popleft() 
+        for i in list(words_list):   
+            if _adjacent(i, curr_stack[-1]):
+                if i == end_word:
+                    curr_stack.append(i)
+                    return curr_stack
+                copy_stack = curr_stack[:]
+                copy_stack.append(i)
+                queue.append(copy_stack)
+                words_list.remove(i)
+    return None
 
 def verify_word_ladder(ladder):
     '''
@@ -62,7 +61,7 @@ def verify_word_ladder(ladder):
     >>> verify_word_ladder(['stone', 'shone', 'phony'])
     False
     '''
-    if len(ladder) == 0: 
+    if not ladder: 
         return False
     for i in range(len(ladder)-1):
         if _adjacent(ladder[i], ladder[i+1]) == False:
@@ -80,7 +79,10 @@ def _adjacent(word1, word2):
     False
     '''
     counter = 0
+    if len(word1) != len(word2):
+        return False
     for i in range(len(word1)):
         if word1[i] != word2[i]:
             counter += 1
     return counter == 1
+print(word_ladder('stone','phone'))
